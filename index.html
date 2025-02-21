@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart agriculture System Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            background-color: #61dafb;
+            color: white;
+            padding: 20px 0;
+            font-size: 1.5rem;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .weather-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-box h2 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .weather-box p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Smart Agriculture System  Dashboard
+    </header>
+    <section class="dashboard">
+        <div class="weather-box">
+            <h2>Temperature</h2>
+            <p id="temperature">-- °F</p>
+        </div>
+        <div class="weather-box">
+            <h2>Humidity</h2>
+            <p id="humidity">-- %</p>
+        </div>
+        <div class="weather-box">
+            <h2>Wind Speed</h2>
+            <p id="wind-speed">-- mph</p>
+        </div>
+        <div class="weather-box">
+            <h2>Wind Direction</h2>
+            <p id="wind-direction">--</p>
+        </div>
+        <div class="weather-box">
+            <h2>Condition</h2>
+            <p id="condition">--</p>
+        </div>
+        <div class="weather-box">
+            <h2>Soil Moisture</h2>
+            <p id="soil-moisture">--</p>
+        </div>
+        <div class="weather-box">
+            <h2>Soil Status</h2>
+            <p id="soil-status">--</p>
+        </div>
+    </section>
+
+    <script>
+        async function fetchWeatherData() {
+            try {
+                const response = await fetch('http://192.168.14.27:5000/weather-data');
+                const data = await response.json();
+
+                document.getElementById('temperature').textContent = `${data.temperature} °F`;
+                document.getElementById('humidity').textContent = `${data.humidity} %`;
+                document.getElementById('wind-speed').textContent = `${data.wind_speed} mph`;
+                document.getElementById('wind-direction').textContent = data.wind_direction;
+                document.getElementById('condition').textContent = data.weather_description;
+                document.getElementById('soil-moisture').textContent = `${data.soil_moisture}`;
+                document.getElementById('soil-status').textContent = data.soil_status;
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+            }
+        }
+
+        // Update weather data every 2 seconds
+        setInterval(fetchWeatherData, 2000);
+
+        // Fetch data immediately when the page loads
+        window.onload = fetchWeatherData;
+    </script>
+</body>
+</html>
